@@ -28,7 +28,6 @@ public class FtpSchedule {
         final Integer idFonte = 70;
 
         logger.info("Fonte: "+idFonte);
-        logger.info("Prop FTP load from "+PATH);
 
         final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
@@ -42,7 +41,6 @@ public class FtpSchedule {
         final Integer idFonte = 595;
 
         logger.info("Fonte: "+idFonte);
-        logger.info("Prop FTP load from "+PATH);
 
         final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
@@ -56,7 +54,6 @@ public class FtpSchedule {
         final Integer idFonte = 217;
 
         logger.info("Fonte: "+idFonte);
-        logger.info("Prop FTP load from "+PATH);
 
         final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
@@ -70,7 +67,6 @@ public class FtpSchedule {
         final Integer idFonte = 216;
 
         logger.info("Fonte: "+idFonte);
-        logger.info("Prop FTP load from "+PATH);
 
         final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
