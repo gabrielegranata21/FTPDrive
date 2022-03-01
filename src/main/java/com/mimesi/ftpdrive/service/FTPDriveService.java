@@ -63,8 +63,11 @@ public class FTPDriveService {
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
             logger.error("Connessione Interrotta");
+            ftpDto.setResultDownload(false);
             ftpDto.setError(jSchException.getMessage());
         }
+
+        ftpDto.setResultDownload(true);
 
         moveFileForCompressPDF(toPath);
 
