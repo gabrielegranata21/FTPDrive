@@ -58,7 +58,11 @@ public class FTPDriveService {
             ftpDto.setFromPath(fromPath);
             ftpDto.setToPath(toPath);
 
-            downloadFromFolder(channelSftp,fromPath,toPath);
+            if (fonte.equals(999)) {
+                downloadFilesFromFolder(channelSftp,fromPath,toPath);
+            } else {
+                downloadFromFolder(channelSftp,fromPath,toPath);
+            }
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
@@ -69,7 +73,7 @@ public class FTPDriveService {
 
         ftpDto.setResultDownload(true);
 
-        moveFileForCompressPDF(toPath);
+        // moveFileForCompressPDF(toPath);
 
         return ftpDto;
 
@@ -137,6 +141,42 @@ public class FTPDriveService {
         }
     }
 
+    /**
+     * Method to download a list of file from folder
+     * @param channelSftp
+     * @param folder
+     * @param toPath
+     */
+    private void downloadFilesFromFolder (final ChannelSftp channelSftp,
+                                          final String folder,
+                                          final String toPath) {
+        try {
+            Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
+            logger.info("Entries: "+entries);
+
+            //download all from folder
+            for (ChannelSftp.LsEntry en : entries) {
+                if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
+                    continue;
+                }
+
+                final String toPathWithFilename = toPath + File.separatorChar + en.getFilename();
+                logger.info("File will be download: "+en.getFilename());
+                logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPathWithFilename);
+                channelSftp.get(folder + en.getFilename(), toPathWithFilename);
+                logger.info("Download Ended ----> Successfully Write in "+toPathWithFilename);
+            }
+        } catch (SftpException sftpException) {
+            logger.error("Errore durante il download: "+sftpException.getMessage());
+            if (sftpException.getMessage().contains("No such file")) {
+                logger.error("Nessun file presente nella data odierna");
+            }
+        } finally {
+            channelSftp.exit();
+            channelSftp.disconnect();
+        }
+    }
+
 
     /**
      * Method to generate paths from specific @Fonte, from FTPDrive
@@ -166,6 +206,11 @@ public class FTPDriveService {
             case 595:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_595
+                        + datePatternFolder + "/";
+                break;
+            case 999:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_999
                         + datePatternFolder + "/";
                 break;
             case 872:
@@ -207,6 +252,10 @@ public class FTPDriveService {
             case 595:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.mifi.595");
+                break;
+            case 999:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.diogene.999");
                 break;
         }
 
