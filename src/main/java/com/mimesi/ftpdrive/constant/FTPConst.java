@@ -13,4 +13,6 @@ public class FTPConst {
     public static final String BASE_PATH_595 = "/ClassMedia/MIFI/";
     public static final String BASE_PATH_872 = "/TuttoSport/";
     public static final String BASE_PATH_873 = "/CorriereSport/";
+
+    public static final String BASE_PATH_999 = "/Autorivari/Diogene/";
 }
