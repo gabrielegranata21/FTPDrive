@@ -58,11 +58,8 @@ public class FTPDriveService {
             ftpDto.setFromPath(fromPath);
             ftpDto.setToPath(toPath);
 
-            if (fonte.equals(999)) {
-                downloadFilesFromFolder(channelSftp,fromPath,toPath);
-            } else {
-                downloadFromFolder(channelSftp,fromPath,toPath);
-            }
+            downloadFromFolder(channelSftp,fromPath,toPath,fonte);
+
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
@@ -114,7 +111,8 @@ public class FTPDriveService {
      */
     private void downloadFromFolder(final ChannelSftp channelSftp,
                                     final String folder,
-                                    final String toPath) {
+                                    final String toPath,
+                                    final Integer idFonte) {
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
             logger.info("Entries: "+entries);
@@ -126,45 +124,17 @@ public class FTPDriveService {
                 }
 
                 logger.info("File will be download: "+en.getFilename());
-                logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
-                channelSftp.get(folder + en.getFilename(), toPath);
-                logger.info("Download Ended ----> Successfully Write in "+toPath);
-            }
-        } catch (SftpException sftpException) {
-            logger.error("Errore durante il download: "+sftpException.getMessage());
-            if (sftpException.getMessage().contains("No such file")) {
-                logger.error("Nessun file presente nella data odierna");
-            }
-        } finally {
-            channelSftp.exit();
-            channelSftp.disconnect();
-        }
-    }
 
-    /**
-     * Method to download a list of file from folder
-     * @param channelSftp
-     * @param folder
-     * @param toPath
-     */
-    private void downloadFilesFromFolder (final ChannelSftp channelSftp,
-                                          final String folder,
-                                          final String toPath) {
-        try {
-            Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
-            logger.info("Entries: "+entries);
-
-            //download all from folder
-            for (ChannelSftp.LsEntry en : entries) {
-                if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
-                    continue;
+                if (idFonte.equals(999)) {
+                    final String toPathWithOriginalFilename = toPath + File.separatorChar + en.getFilename();
+                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPathWithOriginalFilename);
+                    channelSftp.get(folder + en.getFilename(), toPathWithOriginalFilename);
+                    logger.info("Download Ended ----> Successfully Write in "+toPathWithOriginalFilename);
+                } else {
+                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+                    channelSftp.get(folder + en.getFilename(), toPath);
+                    logger.info("Download Ended ----> Successfully Write in "+toPath);
                 }
-
-                final String toPathWithFilename = toPath + File.separatorChar + en.getFilename();
-                logger.info("File will be download: "+en.getFilename());
-                logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPathWithFilename);
-                channelSftp.get(folder + en.getFilename(), toPathWithFilename);
-                logger.info("Download Ended ----> Successfully Write in "+toPathWithFilename);
             }
         } catch (SftpException sftpException) {
             logger.error("Errore durante il download: "+sftpException.getMessage());
@@ -176,7 +146,6 @@ public class FTPDriveService {
             channelSftp.disconnect();
         }
     }
-
 
     /**
      * Method to generate paths from specific @Fonte, from FTPDrive
