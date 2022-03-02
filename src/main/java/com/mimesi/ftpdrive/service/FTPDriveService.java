@@ -70,7 +70,7 @@ public class FTPDriveService {
 
         ftpDto.setResultDownload(true);
 
-        // moveFileForCompressPDF(toPath);
+        moveFileForCompressPDF(toPath);
 
         return ftpDto;
 
