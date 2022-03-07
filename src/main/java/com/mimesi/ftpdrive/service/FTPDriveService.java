@@ -70,7 +70,9 @@ public class FTPDriveService {
 
         ftpDto.setResultDownload(true);
 
-        moveFileForCompressPDF(toPath);
+        if(!fonte.equals(999)) {
+            moveFileForCompressPDF(toPath);
+        }
 
         return ftpDto;
 
@@ -128,10 +130,14 @@ public class FTPDriveService {
                 logger.info("File will be download: "+en.getFilename());
 
                 if (idFonte.equals(999)) {
-                    final String toPathWithOriginalFilename = toPath + File.separatorChar + en.getFilename();
-                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPathWithOriginalFilename);
-                    channelSftp.get(folder + en.getFilename(), toPathWithOriginalFilename);
-                    logger.info("Download Ended ----> Successfully Write in "+toPathWithOriginalFilename);
+                    String toPathWithOriginalFilename = toPath
+                            + File.separatorChar
+                            + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                    makeFolder(new File(toPathWithOriginalFilename));
+                    final String finalFolderDownload = toPathWithOriginalFilename + File.separatorChar + en.getFilename();
+                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ finalFolderDownload);
+                    channelSftp.get(folder + en.getFilename(), finalFolderDownload);
+                    logger.info("Download Ended ----> Successfully Write in "+finalFolderDownload);
                 } else {
                     logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
                     channelSftp.get(folder + en.getFilename(), toPath);
@@ -285,5 +291,15 @@ public class FTPDriveService {
         //     throw new FileSystemException(batchFolderFinal);
         // }
         logger.info("***** END MOVE FILE INTO "+batchFolderFinal+" *****");
+    }
+
+    /**
+     * Method for create folders from File
+     * @param fileWithFolder
+     */
+    private void makeFolder(final File fileWithFolder) {
+        if(!fileWithFolder.exists()) {
+            fileWithFolder.mkdirs();
+        }
     }
 }
