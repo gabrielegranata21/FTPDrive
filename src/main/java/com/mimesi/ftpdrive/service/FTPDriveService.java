@@ -40,7 +40,7 @@ public class FTPDriveService {
      * @param fonte
      */
     public FTPDriveDto getPDFromFonte(final Integer fonte) {
-        final FTPDriveDto ftpDto = new FTPDriveDto();
+        FTPDriveDto ftpDto = new FTPDriveDto();
 
         ftpDto.setIdFonte(fonte);
 
@@ -109,8 +109,10 @@ public class FTPDriveService {
      * @param folder
      * @param toPath
      */
-    private void downloadFromFolder(final ChannelSftp channelSftp,
+    private FTPDriveDto downloadFromFolder(final ChannelSftp channelSftp,
                                     final String folder,
+                                    final String toPath) {
+        final FTPDriveDto ftpDto = new FTPDriveDto();
                                     final String toPath,
                                     final Integer idFonte) {
         try {
@@ -140,12 +142,16 @@ public class FTPDriveService {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
                 logger.error("Nessun file presente nella data odierna");
+                ftpDto.setError(sftpException.getMessage());
+                ftpDto.setResultDownload(false);
             }
         } finally {
             channelSftp.exit();
             channelSftp.disconnect();
+            return ftpDto;
         }
     }
+
 
     /**
      * Method to generate paths from specific @Fonte, from FTPDrive
