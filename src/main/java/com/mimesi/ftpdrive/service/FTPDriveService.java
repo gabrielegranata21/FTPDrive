@@ -110,11 +110,11 @@ public class FTPDriveService {
      * @param toPath
      */
     private FTPDriveDto downloadFromFolder(final ChannelSftp channelSftp,
-                                    final String folder,
-                                    final String toPath) {
+                                           final String folder,
+                                           final String toPath,
+                                           final Integer idFonte){
         final FTPDriveDto ftpDto = new FTPDriveDto();
-                                    final String toPath,
-                                    final Integer idFonte) {
+
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
             logger.info("Entries: "+entries);
