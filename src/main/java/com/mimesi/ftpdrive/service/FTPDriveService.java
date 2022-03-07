@@ -40,7 +40,7 @@ public class FTPDriveService {
      * @param fonte
      */
     public FTPDriveDto getPDFromFonte(final Integer fonte) {
-        final FTPDriveDto ftpDto = new FTPDriveDto();
+        FTPDriveDto ftpDto = new FTPDriveDto();
 
         ftpDto.setIdFonte(fonte);
 
@@ -58,7 +58,7 @@ public class FTPDriveService {
             ftpDto.setFromPath(fromPath);
             ftpDto.setToPath(toPath);
 
-            downloadFromFolder(channelSftp,fromPath,toPath);
+            ftpDto = downloadFromFolder(channelSftp,fromPath,toPath);
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
@@ -108,9 +108,10 @@ public class FTPDriveService {
      * @param folder
      * @param toPath
      */
-    private void downloadFromFolder(final ChannelSftp channelSftp,
+    private FTPDriveDto downloadFromFolder(final ChannelSftp channelSftp,
                                     final String folder,
                                     final String toPath) {
+        final FTPDriveDto ftpDto = new FTPDriveDto();
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
             logger.info("Entries: "+entries);
@@ -130,10 +131,13 @@ public class FTPDriveService {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
                 logger.error("Nessun file presente nella data odierna");
+                ftpDto.setError(sftpException.getMessage());
+                ftpDto.setResultDownload(false);
             }
         } finally {
             channelSftp.exit();
             channelSftp.disconnect();
+            return ftpDto;
         }
     }
 
