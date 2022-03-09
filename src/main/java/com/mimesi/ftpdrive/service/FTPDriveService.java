@@ -42,8 +42,6 @@ public class FTPDriveService {
     public FTPDriveDto getPDFromFonte(final Integer fonte) {
         FTPDriveDto ftpDto = new FTPDriveDto();
 
-        ftpDto.setIdFonte(fonte);
-
         final String fromPath = pdfFromPath(fonte);
         logger.info("Get File from: "+fromPath);
         final String toPath = pdfToPath(fonte);
@@ -55,10 +53,7 @@ public class FTPDriveService {
             ChannelSftp channelSftp = (ChannelSftp) connectionChannel;
             logger.info("*** START TO DOWNLOAD FILE FROM "+fromPath);
 
-            ftpDto.setFromPath(fromPath);
-            ftpDto.setToPath(toPath);
-
-            ftpDto = downloadFromFolder(channelSftp,fromPath,toPath);
+            ftpDto = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
@@ -66,8 +61,6 @@ public class FTPDriveService {
             ftpDto.setResultDownload(false);
             ftpDto.setError(jSchException.getMessage());
         }
-
-        ftpDto.setResultDownload(true);
 
         moveFileForCompressPDF(toPath);
 
@@ -109,9 +102,13 @@ public class FTPDriveService {
      * @param toPath
      */
     private FTPDriveDto downloadFromFolder(final ChannelSftp channelSftp,
-                                    final String folder,
-                                    final String toPath) {
+                                           final String folder,
+                                           final String toPath,
+                                           final Integer idFonte) {
         final FTPDriveDto ftpDto = new FTPDriveDto();
+        ftpDto.setIdFonte(idFonte);
+        ftpDto.setFromPath(folder);
+        ftpDto.setToPath(toPath);
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
             logger.info("Entries: "+entries);
@@ -127,11 +124,12 @@ public class FTPDriveService {
                 channelSftp.get(folder + en.getFilename(), toPath);
                 logger.info("Download Ended ----> Successfully Write in "+toPath);
             }
+            ftpDto.setResultDownload(true);
         } catch (SftpException sftpException) {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
                 logger.error("Nessun file presente nella data odierna");
-                ftpDto.setError(sftpException.getMessage());
+                ftpDto.setError(sftpException.getMessage() + "Nessun file presente nella data odierna");
                 ftpDto.setResultDownload(false);
             }
         } finally {
