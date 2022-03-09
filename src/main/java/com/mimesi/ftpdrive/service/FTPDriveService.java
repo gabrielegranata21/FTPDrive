@@ -116,6 +116,9 @@ public class FTPDriveService {
                                            final String toPath,
                                            final Integer idFonte){
         final FTPDriveDto ftpDto = new FTPDriveDto();
+        ftpDto.setIdFonte(idFonte);
+        ftpDto.setFromPath(folder);
+        ftpDto.setToPath(toPath);
 
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
@@ -144,11 +147,12 @@ public class FTPDriveService {
                     logger.info("Download Ended ----> Successfully Write in "+toPath);
                 }
             }
+            ftpDto.setResultDownload(true);
         } catch (SftpException sftpException) {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
                 logger.error("Nessun file presente nella data odierna");
-                ftpDto.setError(sftpException.getMessage());
+                ftpDto.setError(sftpException.getMessage() + "Nessun file presente nella data odierna");
                 ftpDto.setResultDownload(false);
             }
         } finally {
