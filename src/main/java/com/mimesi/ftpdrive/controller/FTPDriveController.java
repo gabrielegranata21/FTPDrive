@@ -2,6 +2,7 @@ package com.mimesi.ftpdrive.controller;
 
 import com.mimesi.ftpdrive.dto.FTPDriveDto;
 import com.mimesi.ftpdrive.service.FTPDriveService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class FTPDriveController {
     private FTPDriveService ftpService;
 
     @GetMapping(path = "/pdf")
+    @ApiOperation(value = "GetFonte from FTPDrive", notes = "Recuperare una fonte specifica dal server FTP")
     public FTPDriveDto getFonteFromFTPDrive(@RequestParam("fonte") final Integer idFonte) {
         FTPDriveDto resposeFtP = new FTPDriveDto();
         logger.info("Get PDF for FONTE: "+idFonte);
