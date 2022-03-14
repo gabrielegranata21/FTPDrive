@@ -258,10 +258,7 @@ public class FTPDriveService {
             logger.error("Errore Durante la Copia del File verso "+batchFolderFinal);
             logger.error("Reason: "+ ioException.getMessage());
         }
-        // boolean isMoved = originalFile.renameTo(new File(finalFileBatch.getPath() + File.separatorChar + originalFile.getName()));
-        // if (!isMoved) {
-        //     throw new FileSystemException(batchFolderFinal);
-        // }
+
         logger.info("***** END MOVE FILE INTO "+batchFolderFinal+" *****");
     }
 }
