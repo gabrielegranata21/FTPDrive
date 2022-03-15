@@ -171,12 +171,12 @@ public class FTPDriveService {
                         + datePatternFolder + "/";
                 break;
             case 872:
-                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_SECOND);
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_872
                         + datePatternFolder + "/";
                 break;
             case 873:
-                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_SECOND);
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_873
                         + datePatternFolder + "/";
                 break;
