@@ -210,6 +210,12 @@ public class FTPDriveService {
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.mifi.595");
                 break;
+            case 872:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.tuttosport.872");
+            case 873:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.corrieresport.873");
         }
 
         return toPath;
