@@ -62,7 +62,7 @@ public class FTPDriveService {
             ftpDto.setError(jSchException.getMessage());
         }
 
-        moveFileForCompressPDF(toPath);
+       // moveFileForCompressPDF(toPath);
 
         return ftpDto;
 
@@ -121,6 +121,7 @@ public class FTPDriveService {
 
                 logger.info("File will be download: "+en.getFilename());
                 logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+
                 channelSftp.get(folder + en.getFilename(), toPath);
                 logger.info("Download Ended ----> Successfully Write in "+toPath);
             }
@@ -212,10 +213,16 @@ public class FTPDriveService {
                 break;
             case 872:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
-                        + env.getProperty("pattern.tuttosport.872");
+                        + env.getProperty("pattern.tuttosport.872")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                createFolder(new File(toPath));
+                break;
             case 873:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
-                        + env.getProperty("pattern.corrieresport.873");
+                        + env.getProperty("pattern.corrieresport.873")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                createFolder(new File(toPath));
+                break;
         }
 
         return toPath;
@@ -266,5 +273,11 @@ public class FTPDriveService {
         }
 
         logger.info("***** END MOVE FILE INTO "+batchFolderFinal+" *****");
+    }
+
+    private void createFolder(final File file) {
+        if(!file.exists()) {
+            file.mkdirs();
+        }
     }
 }
