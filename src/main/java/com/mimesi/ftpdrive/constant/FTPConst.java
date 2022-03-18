@@ -13,4 +13,21 @@ public class FTPConst {
     public static final String BASE_PATH_595 = "/ClassMedia/MIFI/";
     public static final String BASE_PATH_872 = "/TuttoSport/";
     public static final String BASE_PATH_873 = "/CorriereSport/";
+
+    public static final String REGEX_TUTTOSPORT_NAZIONALE = "TTSNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_TUTTOSPORT_PIEMONTE = "TTSPIEMON[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_TUTTOSPORT_SICILIA = "TTSSICMES[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_TUTTOSPORT_SARDEGNA = "TTSSARCAG[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+
+    public static final String REGEX_CORRSPORT_NAZIONALE = "CORNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_CAMPANIA = "CORCAMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_PUGLIA = "CORPUGBAR[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_ROMA = "CORROMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_SARDEGNA = "CORSARCAG[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_VENETO = "CORVENGRI[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_STADIO = "STANAZALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_STADIO_BOLOGNA = "STABOLALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_SUPPLEMENTO = "COTNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+
+
 }
