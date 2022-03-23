@@ -269,9 +269,7 @@ public class FTPDriveService {
         final Path fromPath = Paths.get(toPath);
         final File finalFileBatch = new File(batchFolderFinal);
 
-        if(!finalFileBatch.exists()) {
-            finalFileBatch.mkdirs();
-        }
+        makeFolder(finalFileBatch);
 
         try{
             final Path finalBatchFolder = Paths.get(batchFolderFinal+fromPath.getFileName());
