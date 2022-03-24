@@ -3,7 +3,6 @@ package com.mimesi.ftpdrive.constant;
 public class FTPConst {
 
     public static final String DATE_PATTERN_FIRST = "yyyyMMdd";
-    public static final String DATE_PATTERN_SECOND = "dd-MM-yyyy";
     public static final String YEAR_MONTH = "yyyyMM";
     public static final String DAY = "dd";
 
@@ -29,5 +28,15 @@ public class FTPConst {
     public static final String REGEX_CORRSPORT_STADIO_BOLOGNA = "STABOLALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_SUPPLEMENTO = "COTNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
 
+    public static final String EDIZIONE_PIEMONTE = "PIE";
+    public static final String EDIZIONE_SICILIA = "SIC";
+    public static final String EDIZIONE_SARDEGNA = "SAR";
+    public static final String EDIZIONE_CAMPANIA = "CAM";
+    public static final String EDIZIONE_PUGLIA = "PUG";
+    public static final String EDIZIONE_ROMA = "ROM";
+    public static final String EDIZIONE_VENETO = "VEN";
+    public static final String EDIZIONE_STADIO = "STA";
+    public static final String EDIZIONE_STADIO_BOLOGNA = "STABOL";
+    public static final String EDIZIONE_SUPPLEMENTO = "SUP";
 
 }
