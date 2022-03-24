@@ -1,5 +1,12 @@
 package com.mimesi.ftpdrive.service;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.mimesi.ftpdrive.constant.FTPConst;
 import com.mimesi.ftpdrive.dto.RenameFTPDriveDto;
 import org.apache.logging.log4j.LogManager;
@@ -9,8 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,6 +29,7 @@ import java.util.Objects;
 public class RenameFTPDriveService {
 
     private static final Logger logger = LogManager.getLogger(FTPDriveService.class);
+    private static final byte[] buffer = new byte[100000];
 
     @Autowired
     private Environment env;
@@ -39,88 +46,41 @@ public class RenameFTPDriveService {
         // la lista dei file, suddivisi per le varie edizioni
         final String pdfToPathRename = pdfToPathRename(idFonte);
         final List<List<File>> listFontePDF = setEditionSourcesPDF(fromPathFiles,idFonte);
-        if (idFonte.equals(872)){
-            for (List<File> edition : listFontePDF) {
-                for(File singleFile : edition){
-                    if(singleFile.getName().substring(21,22).equals("S") ||
-                            singleFile.getName().substring(21,22).equals("T") ||
-                            singleFile.getName().substring(21,22).equals("Z") ){
-                        logger.info("File: "+singleFile.getName());
-                        logger.info("PAGINA DA CONSIDERARE DOPPIA, DEVE ESSERE RITAGLIATA");
-                    } else {
+        for (List<File> edition : listFontePDF) {
+            for(File singleFile : edition){
+                if(singleFile.getName().substring(21,22).equals("S") ||
+                        singleFile.getName().substring(21,22).equals("T") ||
+                        singleFile.getName().substring(21,22).equals("Z") ){
+                    logger.info("File: "+singleFile.getName());
+                    logger.info("PAGINA DA CONSIDERARE DOPPIA, DEVE ESSERE RITAGLIATA");
+                    final byte[] pdfBytes = readPDFFile(singleFile.getAbsolutePath());
+                    byte[][] tilePdf = tilePdf(pdfBytes);
+                    int numPage = Integer.parseInt(singleFile.getName().substring(16,18));
+                    for (byte[] currPag: tilePdf){
+                        final StringBuilder fileFinalName = defineFileName(singleFile.getName(), String.valueOf(numPage), idFonte);
+                        String fileNameToBeWrite = pdfToPathRename + File.separatorChar + fileFinalName;
                         try {
-                            logger.info("PAGINA TUTTOSPORT SINGOLA, STO PER RINOMINARE E COPIARE");
-                            final Path fromPath = Paths.get(singleFile.getAbsolutePath());
-                            final String numPageFile = singleFile.getName().substring(16, 18);
-                            StringBuilder fileFinalName = new StringBuilder("0" +idFonte+ "_binpage");
-                            if (singleFile.getName().matches(FTPConst.REGEX_TUTTOSPORT_NAZIONALE)) {
-                                fileFinalName.append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_TUTTOSPORT_PIEMONTE)){
-                                fileFinalName.append(FTPConst.EDIZIONE_PIEMONTE).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_TUTTOSPORT_SICILIA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_SICILIA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
-                            } else {
-                                logger.error("Il file "+singleFile.getName()+ "non matcha con nessun edizione della fonte TUTTOSPORT");
-                            }
-                            final Path finalBatchFolder = Paths.get(pdfToPathRename+File.separatorChar+fileFinalName);
-                            Files.copy(fromPath,finalBatchFolder);
-                        } catch (IOException ex) {
-                            logger.error("Errore durante la copia del file rinominato");
-                            logger.error(ex.getMessage());
+                            write(currPag,fileNameToBeWrite);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                        numPage ++;
                     }
-                }
-            }
-        } else if (idFonte.equals(873)){
-            for (List<File> edition : listFontePDF) {
-                for(File singleFile : edition){
-                    if(singleFile.getName().substring(21,22).equals("S") ||
-                            singleFile.getName().substring(21,22).equals("T") ||
-                            singleFile.getName().substring(21,22).equals("Z") ){
-                        logger.info("File: "+singleFile.getName());
-                        logger.info("PAGINA DA CONSIDERARE DOPPIA, DEVE ESSERE RITAGLIATA");
-                    } else {
-                        try {
-                            logger.info("PAGINA SINGOLA, STO PER RINOMINARE E COPIARE");
-                            final Path fromPath = Paths.get(singleFile.getAbsolutePath());
-                            final String numPageFile = singleFile.getName().substring(16, 18);
-                            StringBuilder fileFinalName = new StringBuilder("0" +idFonte+ "_binpage");
-                            if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_NAZIONALE)) {
-                                fileFinalName.append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_CAMPANIA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_CAMPANIA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_PUGLIA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_PUGLIA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_ROMA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_ROMA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_SARDEGNA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_VENETO)){
-                                fileFinalName.append(FTPConst.EDIZIONE_VENETO).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_STADIO)){
-                                fileFinalName.append(FTPConst.EDIZIONE_STADIO).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_STADIO_BOLOGNA)){
-                                fileFinalName.append(FTPConst.EDIZIONE_STADIO_BOLOGNA).append(numPageFile).append(".pdf");
-                            } else if (singleFile.getName().matches(FTPConst.REGEX_CORRSPORT_SUPPLEMENTO)){
-                                fileFinalName.append(FTPConst.EDIZIONE_SUPPLEMENTO).append(numPageFile).append(".pdf");
-                            } else {
-                                logger.error("Il file "+singleFile.getName()+ "non matcha con nessun edizione della fonte CORRIERE SPORT");
-                            }
-                            final Path finalBatchFolder = Paths.get(pdfToPathRename+File.separatorChar+fileFinalName);
-                            Files.copy(fromPath,finalBatchFolder);
-                        } catch (IOException ex) {
-                            logger.error("Errore durante la copia del file rinominato");
-                            logger.error(ex.getMessage());
-                        }
-
+                } else {
+                    try {
+                        logger.info("PAGINA SINGOLA, STO PER RINOMINARE E COPIARE");
+                        final Path fromPath = Paths.get(singleFile.getAbsolutePath());
+                        final String numPageFile = singleFile.getName().substring(16, 18);
+                        final StringBuilder fileFinalName = defineFileName(singleFile.getName(), numPageFile, idFonte);
+                        final Path finalBatchFolder = Paths.get(pdfToPathRename+File.separatorChar+fileFinalName);
+                        Files.copy(fromPath,finalBatchFolder);
+                    } catch (IOException ex) {
+                        logger.error("Errore durante la copia del file rinominato");
+                        logger.error(ex.getMessage());
                     }
                 }
             }
         }
-
-
 
         return responseDto;
     }
@@ -246,5 +206,147 @@ public class RenameFTPDriveService {
         }
 
         return pdfToPathRename;
+    }
+
+    /**
+     * Method for define final filename from regex source
+     * @param originalFilename
+     * @param numPageFile
+     * @param idFonte
+     * @return
+     */
+    public StringBuilder defineFileName (final String originalFilename,
+                                         final String numPageFile,
+                                         final Integer idFonte) {
+        StringBuilder filename = new StringBuilder("0" +idFonte+ "_binpage");
+
+        if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_NAZIONALE)) {
+            filename.append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_CAMPANIA)){
+            filename.append(FTPConst.EDIZIONE_CAMPANIA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_PUGLIA)){
+            filename.append(FTPConst.EDIZIONE_PUGLIA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_ROMA)){
+            filename.append(FTPConst.EDIZIONE_ROMA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_SARDEGNA)){
+            filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_VENETO)){
+            filename.append(FTPConst.EDIZIONE_VENETO).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO)){
+            filename.append(FTPConst.EDIZIONE_STADIO).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO_BOLOGNA)){
+            filename.append(FTPConst.EDIZIONE_STADIO_BOLOGNA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_SUPPLEMENTO)){
+            filename.append(FTPConst.EDIZIONE_SUPPLEMENTO).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_NAZIONALE)) {
+            filename.append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_PIEMONTE)){
+            filename.append(FTPConst.EDIZIONE_PIEMONTE).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SICILIA)){
+            filename.append(FTPConst.EDIZIONE_SICILIA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)){
+            filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
+        } else {
+            logger.error("Il file "+originalFilename+ "non matcha con nessun edizione della fonte "+idFonte);
+        }
+
+        return filename;
+    }
+
+    public static void write(byte[] data, String to) throws IOException {
+        InputStream in = null;
+        OutputStream out = null;
+
+        try {
+            in = new ByteArrayInputStream(data);
+            out = new FileOutputStream(to);
+
+            while (true) {
+                synchronized (buffer) {
+                    int amountRead = in.read(buffer);
+
+                    if (amountRead == -1) {
+                        break;
+                    }
+
+                    out.write(buffer, 0, amountRead);
+                }
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+    /*
+     * I/O SU DISCO
+     */
+    public static byte[] readPDFFile(String filename) {
+        FileInputStream fis = null;
+        BufferedInputStream bis = null;
+        byte[] data = {};
+        try {
+            fis = new FileInputStream(new File(filename));
+            bis = new BufferedInputStream(fis);
+            data = new byte[bis.available()];
+            bis.read(data);
+        } catch (FileNotFoundException fo) {
+            System.out.print("File non trovato: "+fo.getMessage());
+        } catch (IOException e) {
+            System.out.print("Errore durante I/O: "+e.getMessage());
+        } finally {
+            try {
+                fis.close();
+                bis.close();
+            } catch (IOException e) {
+                System.out.print("Errore durante la chiusura degli stream: "+e.getMessage());
+            }
+        }
+
+        return data;
+    }
+
+    public static byte[][] tilePdf(byte[] in) {
+        byte[][] result = new byte[2][];
+
+        PdfReader reader = null;
+        try {
+            reader = new PdfReader(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Rectangle pagesize = reader.getPageSizeWithRotation(1);
+
+        for (int i = 0; i < 2; i++) {
+            Rectangle newPageSize = new Rectangle(pagesize.getWidth() / 2, pagesize.getHeight());
+            Document document = new Document(newPageSize);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PdfWriter writer = null;
+            try {
+                writer = PdfWriter.getInstance(document, baos);
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
+            document.open();
+
+            PdfContentByte content = writer.getDirectContent();
+            PdfImportedPage page = writer.getImportedPage(reader, 1);
+
+            float x = -pagesize.getWidth() * (i % 2) / 2;
+            float y = 0;
+            content.addTemplate(page, 1, 0, 0, 1, x, y);
+            document.newPage();
+            document.close();
+            result[i] = baos.toByteArray();
+        }
+
+        return result;
     }
 }
