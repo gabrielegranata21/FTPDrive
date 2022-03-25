@@ -74,7 +74,7 @@ public class FtpSchedule {
 
     }
 
-    @Scheduled(cron = "0 40 11 * * *")
+    @Scheduled(cron = "0 30 10 * * *")
     public void getDiogene() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
 
