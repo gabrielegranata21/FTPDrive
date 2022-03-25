@@ -25,7 +25,7 @@ public class RenameFTPDriveController {
     public RenameFTPDriveDto renameFonteFromID(@RequestParam("PATH") final  String path,
                                                @RequestParam("ID-Fonte") final Integer idFonte) {
         logger.info("**** CALL FROM API REST RENAME FONTE ****");
-        final RenameFTPDriveDto renameFTPDriveDto = renameFTPDriveService.getEditionSourcesPDF(path,idFonte);
+        final RenameFTPDriveDto renameFTPDriveDto = renameFTPDriveService.renameSourcesPDF(path,idFonte);
         return renameFTPDriveDto;
     }
 }

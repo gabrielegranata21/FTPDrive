@@ -47,7 +47,7 @@ public class RenameFTPDriveService {
     /**
      * Metodo per acquisire le edizioni partendo dal path dei file
      */
-    public RenameFTPDriveDto getEditionSourcesPDF(final String fromPathFiles,
+    public RenameFTPDriveDto renameSourcesPDF(final String fromPathFiles,
                                                   final Integer idFonte) {
         final RenameFTPDriveDto responseDto = new RenameFTPDriveDto();
         logger.info("******** START TO GET ALL FILE FROM "+fromPathFiles);
