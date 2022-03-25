@@ -16,7 +16,17 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -296,15 +306,18 @@ public class RenameFTPDriveService {
             data = new byte[bis.available()];
             bis.read(data);
         } catch (FileNotFoundException fo) {
-            System.out.print("File non trovato: "+fo.getMessage());
+            logger.error("Errore nel metodo readPDFFile");
+            logger.error("File non trovato: "+fo.getMessage());
         } catch (IOException e) {
-            System.out.print("Errore durante I/O: "+e.getMessage());
+            logger.error("Errore nel metodo readPDFFile");
+            logger.error("Errore durante I/O: "+e.getMessage());
         } finally {
             try {
                 fis.close();
                 bis.close();
             } catch (IOException e) {
-                System.out.print("Errore durante la chiusura degli stream: "+e.getMessage());
+                logger.error("Errore nel metodo readPDFFile");
+                logger.error("Errore durante la chiusura degli stream: "+e.getMessage());
             }
         }
 
@@ -318,7 +331,8 @@ public class RenameFTPDriveService {
         try {
             reader = new PdfReader(in);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Errore nel metodo tilePdf");
+            logger.error("Errore durante I/O: "+e.getMessage());
         }
         Rectangle pagesize = reader.getPageSizeWithRotation(1);
 
@@ -331,7 +345,8 @@ public class RenameFTPDriveService {
             try {
                 writer = PdfWriter.getInstance(document, baos);
             } catch (DocumentException e) {
-                e.printStackTrace();
+                logger.error("Errore nel metodo tilePdf");
+                logger.error("Errore DocumentException: "+e.getMessage());
             }
 
             document.open();
