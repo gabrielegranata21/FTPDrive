@@ -1,7 +1,9 @@
 package com.mimesi.ftpdrive.schedule;
 
 import com.mimesi.ftpdrive.dto.FTPDriveDto;
+import com.mimesi.ftpdrive.dto.RenameFTPDriveDto;
 import com.mimesi.ftpdrive.service.FTPDriveService;
+import com.mimesi.ftpdrive.service.RenameFTPDriveService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,11 @@ public class FtpSchedule {
 
     private static final Logger logger = LogManager.getLogger(FtpSchedule.class);
 
-    private static final String PATH = "src/main/resources/ftpdrive.properties";
-
     @Autowired
     private FTPDriveService ftpService;
+
+    @Autowired
+    private RenameFTPDriveService renameFTPDriveService;
 
     @Scheduled(cron = "0 30 04 * * SAT")
     public void getMilanoFinanza() {
@@ -71,6 +74,17 @@ public class FtpSchedule {
         final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+
+    }
+
+    @Scheduled(cron = "0 59 08 * * TUE-SAT")
+    public void getTuttoSport() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 872;
+        final String path = "\\\\192.168.0.172\\pdftemp\\calderonepdf\\FTPDrive\\TuttoSport\\20220317";
+        logger.info("Fonte: "+idFonte);
+
+        final RenameFTPDriveDto ftpResponse = renameFTPDriveService.renameSourcesPDF(path,idFonte);
 
     }
 
