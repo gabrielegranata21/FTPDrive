@@ -58,20 +58,18 @@ public class FTPDriveService {
             ftpDto.setFromPath(fromPath);
             ftpDto.setToPath(toPath);
 
-            downloadFromFolder(channelSftp,fromPath,toPath,fonte);
+            FTPDriveDto result = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
+            if(result.isResultDownload() && !fonte.equals(999)){
+                moveFileForCompressPDF(toPath);
+            }
 
+            ftpDto.setResultDownload(result.isResultDownload());
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
             logger.error("Connessione Interrotta");
             ftpDto.setResultDownload(false);
             ftpDto.setError(jSchException.getMessage());
-        }
-
-        ftpDto.setResultDownload(true);
-
-        if(!fonte.equals(999)) {
-            // moveFileForCompressPDF(toPath);
         }
 
         return ftpDto;
@@ -122,32 +120,38 @@ public class FTPDriveService {
 
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
-            logger.info("Entries: "+entries);
+            if(!entries.isEmpty()){
+                logger.info("Entries: "+entries);
 
-            //download all from folder
-            for (ChannelSftp.LsEntry en : entries) {
-                if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
-                    continue;
+                //download all from folder
+                for (ChannelSftp.LsEntry en : entries) {
+                    if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
+                        continue;
+                    }
+
+                    logger.info("File will be download: "+en.getFilename());
+
+                    if (idFonte.equals(999)) {
+                        String toPathWithOriginalFilename = toPath
+                                + File.separatorChar
+                                + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                        makeFolder(new File(toPathWithOriginalFilename));
+                        final String finalFolderDownload = toPathWithOriginalFilename + File.separatorChar + en.getFilename();
+                        logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ finalFolderDownload);
+                        channelSftp.get(folder + en.getFilename(), finalFolderDownload);
+                        logger.info("Download Ended ----> Successfully Write in "+finalFolderDownload);
+                    } else {
+                        logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+                        channelSftp.get(folder + en.getFilename(), toPath);
+                        logger.info("Download Ended ----> Successfully Write in "+toPath);
+                    }
                 }
-
-                logger.info("File will be download: "+en.getFilename());
-
-                if (idFonte.equals(999)) {
-                    String toPathWithOriginalFilename = toPath
-                            + File.separatorChar
-                            + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                    makeFolder(new File(toPathWithOriginalFilename));
-                    final String finalFolderDownload = toPathWithOriginalFilename + File.separatorChar + en.getFilename();
-                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ finalFolderDownload);
-                    channelSftp.get(folder + en.getFilename(), finalFolderDownload);
-                    logger.info("Download Ended ----> Successfully Write in "+finalFolderDownload);
-                } else {
-                    logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
-                    channelSftp.get(folder + en.getFilename(), toPath);
-                    logger.info("Download Ended ----> Successfully Write in "+toPath);
-                }
+                ftpDto.setResultDownload(true);
+            } else {
+                logger.error("Errore durante il download della fonte "+idFonte);
+                logger.error("THE FOLDER IS EMPTY");
+                ftpDto.setResultDownload(false);
             }
-            ftpDto.setResultDownload(true);
         } catch (SftpException sftpException) {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
