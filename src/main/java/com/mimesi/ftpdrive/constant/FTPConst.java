@@ -12,6 +12,10 @@ public class FTPConst {
     public static final String BASE_PATH_595 = "/ClassMedia/MIFI/";
     public static final String BASE_PATH_872 = "/TuttoSport/";
     public static final String BASE_PATH_873 = "/CorriereSport/";
+    public static final String BASE_PATH_7896 = "/IlRisveglio/";
+    public static final String BASE_PATH_7899 = "/LaValSusa/";
+    public static final String BASE_PATH_7897 = "/RisveglioPopolare/";
+
 
     public static final String REGEX_TUTTOSPORT_NAZIONALE = "TTSNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_TUTTOSPORT_PIEMONTE = "TTSPIEMON[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
@@ -27,6 +31,10 @@ public class FTPConst {
     public static final String REGEX_CORRSPORT_STADIO = "STANAZALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_STADIO_BOLOGNA = "STABOLALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_SUPPLEMENTO = "COTNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+
+    public static final String REGEX_RISVEGLIO = "[0-9]{2}_[0-9]{2}_[0-9]{2}_ilrisveglio_[0-9]{2}.pdf";
+
+    public static final String REGEX_VALSUSA = "lavalsusa-[0-9]{8}_[0-9]{3}.pdf";
 
     public static final String EDIZIONE_PIEMONTE = "PIE";
     public static final String EDIZIONE_SICILIA = "SIC";
