@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mimesi.ftpdrive.constant.FTPConst;
 import com.mimesi.ftpdrive.dto.RenameFTPDriveDto;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class RenameFTPDriveService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private FTPDriveService ftpDriveService;
+
     /**
      * Metodo per acquisire le edizioni partendo dal path dei file
      */
@@ -54,35 +58,48 @@ public class RenameFTPDriveService {
 
         // Creiamo la lista generica che verrà popolata con
         // la lista dei file, suddivisi per le varie edizioni
-        final String pdfToPathRename = pdfToPathRename(idFonte);
+        final String pdfPathRename = pdfToPathRename(idFonte);
         final List<List<File>> listFontePDF = setEditionSourcesPDF(fromPathFiles,idFonte);
         for (List<File> edition : listFontePDF) {
             for(File singleFile : edition){
-                if(singleFile.getName().substring(21,22).equals("S") ||
-                        singleFile.getName().substring(21,22).equals("T") ||
-                        singleFile.getName().substring(21,22).equals("Z") ){
-                    logger.info("File: "+singleFile.getName());
-                    logger.info("PAGINA DA CONSIDERARE DOPPIA, DEVE ESSERE RITAGLIATA");
-                    final byte[] pdfBytes = readPDFFile(singleFile.getAbsolutePath());
-                    byte[][] tilePdf = tilePdf(pdfBytes);
-                    int numPage = Integer.parseInt(singleFile.getName().substring(16,18));
-                    for (byte[] currPag: tilePdf){
-                        final StringBuilder fileFinalName = defineFileName(singleFile.getName(), String.valueOf(numPage), idFonte);
-                        String fileNameToBeWrite = pdfToPathRename + File.separatorChar + fileFinalName;
-                        try {
-                            write(currPag,fileNameToBeWrite);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                if (idFonte.equals(872) || idFonte.equals(873)) {
+                    if(singleFile.getName().substring(21,22).equals("S") ||
+                            singleFile.getName().substring(21,22).equals("T") ||
+                            singleFile.getName().substring(21,22).equals("Z") ){
+                        logger.info("File: "+singleFile.getName());
+                        logger.info("PAGINA DA CONSIDERARE DOPPIA, DEVE ESSERE RITAGLIATA");
+                        final byte[] pdfBytes = readPDFFile(singleFile.getAbsolutePath());
+                        byte[][] tilePdf = tilePdf(pdfBytes);
+                        int numPage = Integer.parseInt(singleFile.getName().substring(16,18));
+                        for (byte[] currPag: tilePdf){
+                            final StringBuilder fileFinalName = defineFileName(singleFile.getName(), String.valueOf(numPage), idFonte);
+                            String fileNameToBeWrite = pdfPathRename + File.separatorChar + fileFinalName;
+                            try {
+                                write(currPag,fileNameToBeWrite);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            numPage ++;
                         }
-                        numPage ++;
                     }
-                } else {
+                }
                     try {
                         logger.info("PAGINA SINGOLA, STO PER RINOMINARE E COPIARE");
+                        logger.info("File che sto RINOMINANDO: "+singleFile.getName());
                         final Path fromPath = Paths.get(singleFile.getAbsolutePath());
-                        final String numPageFile = singleFile.getName().substring(16, 18);
+                        String numPageFile = "";
+
+                        if(idFonte.equals(7896)) {
+                            numPageFile = singleFile.getName().substring(21, 23);
+                        } else if (idFonte.equals(7899)) {
+                            numPageFile = singleFile.getName().substring(20, 22);
+                        } else if (idFonte.equals(872) || idFonte.equals(873)) {
+                            numPageFile = singleFile.getName().substring(16, 18);
+                        }
+
                         final StringBuilder fileFinalName = defineFileName(singleFile.getName(), numPageFile, idFonte);
-                        final Path finalBatchFolder = Paths.get(pdfToPathRename+File.separatorChar+fileFinalName);
+                        logger.info("FILE TO BE WRITE: "+fileFinalName+ " INTO "+pdfPathRename);
+                        final Path finalBatchFolder = Paths.get(pdfPathRename+File.separatorChar+fileFinalName);
                         Files.copy(fromPath,finalBatchFolder);
                     } catch (IOException ex) {
                         logger.error("Errore durante la copia del file rinominato");
@@ -90,8 +107,7 @@ public class RenameFTPDriveService {
                     }
                 }
             }
-        }
-
+        logger.info("*** END RENAME FONTE "+idFonte+" ****");
         return responseDto;
     }
 
@@ -191,6 +207,36 @@ public class RenameFTPDriveService {
             listFileSource.add(listFileStadioBologna);
             listFileSource.add(listFileSupplemento);
 
+        } else if (idFonte.equals(7896)){
+            logger.info("***** IT'S READING IL RISVEGLIO SOURCE *****");
+            final List<File> listRisveglio = new ArrayList<>();
+
+            for(int i = 0; i< Objects.requireNonNull(filenameList).length; i++) {
+                if(filenameList[i].matches(FTPConst.REGEX_RISVEGLIO)) {
+                    listRisveglio.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else {
+                    logger.error("IL FILE "+filenameList[i]+" NON RISPETTA LA REGEX");
+                }
+            }
+
+            logger.info("ADDING LIST OF EDITION IN FATHER LIST FOR IL RISVEGLIO");
+            listFileSource.add(listRisveglio);
+
+        } else if (idFonte.equals(7899)){
+            logger.info("***** IT'S READING LA VAL SUSA SOURCE *****");
+            final List<File> listValSusa = new ArrayList<>();
+
+            for(int i = 0; i< Objects.requireNonNull(filenameList).length; i++) {
+                if(filenameList[i].matches(FTPConst.REGEX_VALSUSA)) {
+                    listValSusa.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else {
+                    logger.error("IL FILE "+filenameList[i]+" NON RISPETTA LA REGEX");
+                }
+            }
+
+            logger.info("ADDING LIST OF EDITION IN FATHER LIST FOR IL RISVEGLIO");
+            listFileSource.add(listValSusa);
+
         }
 
         return listFileSource;
@@ -202,20 +248,11 @@ public class RenameFTPDriveService {
      * @return
      */
     private String pdfToPathRename (final Integer idFonte) {
-        String pdfToPathRename = "";
-
-        switch (idFonte) {
-            case 872:
-                pdfToPathRename = env.getProperty("parent.folder.pdf") + File.separatorChar
-                        + env.getProperty("pattern.tuttosport.marge.872");
-                break;
-            case 873:
-                pdfToPathRename = env.getProperty("parent.folder.pdf") + File.separatorChar
-                        + env.getProperty("pattern.corrieresport.marge.873");
-                break;
-        }
-
-        return pdfToPathRename;
+        final String yearMonth = FTPDriveService.datePatternFolder(FTPConst.YEAR_MONTH);
+        final String day = FTPDriveService.datePatternFolder(FTPConst.DAY);
+        final String pdfPathRename = env.getProperty("parent.folder.pdf") + File.separatorChar
+                + yearMonth + File.separatorChar + day;
+        return pdfPathRename;
     }
 
     /**
@@ -228,7 +265,12 @@ public class RenameFTPDriveService {
     public StringBuilder defineFileName (final String originalFilename,
                                          final String numPageFile,
                                          final Integer idFonte) {
-        StringBuilder filename = new StringBuilder("0" +idFonte+ "_binpage");
+        StringBuilder filename = new StringBuilder();
+        if (idFonte.equals(7896) || idFonte.equals(7899)) {
+            filename.append(idFonte+"_binpage");
+        } else {
+            filename.append("0" +idFonte+ "_binpage");
+        }
 
         if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_NAZIONALE)) {
             filename.append(numPageFile).append(".pdf");
@@ -254,10 +296,14 @@ public class RenameFTPDriveService {
             filename.append(FTPConst.EDIZIONE_PIEMONTE).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SICILIA)){
             filename.append(FTPConst.EDIZIONE_SICILIA).append(numPageFile).append(".pdf");
-        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)){
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)) {
             filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_RISVEGLIO)){
+            filename.append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_VALSUSA)){
+            filename.append(numPageFile).append(".pdf");
         } else {
-            logger.error("Il file "+originalFilename+ "non matcha con nessun edizione della fonte "+idFonte);
+            logger.error("Il file "+originalFilename+ " non matcha con nessun edizione della fonte "+idFonte);
         }
 
         return filename;
