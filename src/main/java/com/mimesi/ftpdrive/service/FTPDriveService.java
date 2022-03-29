@@ -34,6 +34,9 @@ public class FTPDriveService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RenameFTPDriveService renameFTPDriveService;
+
     /**
      * Method to get PDF from FONTE
      *
@@ -62,7 +65,14 @@ public class FTPDriveService {
             ftpDto.setError(jSchException.getMessage());
         }
 
-       // moveFileForCompressPDF(toPath);
+        if (fonte.equals(872) ||
+                fonte.equals(873) ||
+                fonte.equals(7896) ||
+                fonte.equals(7899)) {
+            renameFTPDriveService.renameSourcesPDF(toPath,fonte);
+        } else {
+            moveFileForCompressPDF(toPath);
+        }
 
         return ftpDto;
 
@@ -181,6 +191,21 @@ public class FTPDriveService {
                 fromPath = FTPConst.BASE_PATH_873
                         + datePatternFolder + "/";
                 break;
+            case 7896:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_7896
+                        + datePatternFolder + "/";
+                break;
+            case 7897:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_7897
+                        + datePatternFolder + "/";
+                break;
+            case 7899:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_7899
+                        + datePatternFolder + "/";
+                break;
         }
         return fromPath;
 
@@ -222,6 +247,21 @@ public class FTPDriveService {
                         + env.getProperty("pattern.corrieresport.873")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 createFolder(new File(toPath));
+            case 7896:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.risveglio.7896")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                createFolder(new File(toPath));
+                break;
+            case 7897:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.risvegliopopolare.7897");
+                break;
+            case 7899:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.valsusa.7899")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                createFolder(new File(toPath));
                 break;
         }
 
@@ -233,7 +273,7 @@ public class FTPDriveService {
      * @param pattern
      * @return
      */
-    private static String datePatternFolder (final String pattern) {
+    public static String datePatternFolder (final String pattern) {
         SimpleDateFormat formFile = new SimpleDateFormat(pattern);
         Date date = new Date();
         String datePatternFolder = formFile.format(date);
