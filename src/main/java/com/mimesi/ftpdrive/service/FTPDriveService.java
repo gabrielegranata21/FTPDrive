@@ -191,6 +191,11 @@ public class FTPDriveService {
                 fromPath = FTPConst.BASE_PATH_873
                         + datePatternFolder + "/";
                 break;
+            case 1499:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_1499
+                        + datePatternFolder + "/";
+                break;
             case 7896:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_7896
@@ -247,6 +252,10 @@ public class FTPDriveService {
                         + env.getProperty("pattern.corrieresport.873")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 createFolder(new File(toPath));
+            case 1499:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.corrsiena.1499");
+                break;
             case 7896:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.risveglio.7896")
