@@ -181,6 +181,11 @@ public class FTPDriveService {
                 fromPath = FTPConst.BASE_PATH_595
                         + datePatternFolder + "/";
                 break;
+            case 632:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_632
+                        + datePatternFolder + "/";
+                break;
             case 872:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_872
@@ -194,6 +199,16 @@ public class FTPDriveService {
             case 1499:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_1499
+                        + datePatternFolder + "/";
+                break;
+            case 15262:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_15262
+                        + datePatternFolder + "/";
+                break;
+            case 15263:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_15263
                         + datePatternFolder + "/";
                 break;
             case 7896:
@@ -241,6 +256,10 @@ public class FTPDriveService {
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.mifi.595");
                 break;
+            case 632:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.corrumbria.632");
+                break;
             case 872:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.tuttosport.872")
@@ -255,6 +274,14 @@ public class FTPDriveService {
             case 1499:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.corrsiena.1499");
+                break;
+            case 15262:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.corrarezzo.15262");
+                break;
+            case 15263:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.corrviterbo.15263");
                 break;
             case 7896:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
