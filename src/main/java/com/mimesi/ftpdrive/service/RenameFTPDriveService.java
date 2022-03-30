@@ -9,7 +9,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mimesi.ftpdrive.constant.FTPConst;
 import com.mimesi.ftpdrive.dto.RenameFTPDriveDto;
-import org.apache.commons.net.ftp.FTP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

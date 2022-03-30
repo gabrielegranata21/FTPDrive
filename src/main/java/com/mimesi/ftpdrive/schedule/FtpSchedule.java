@@ -25,7 +25,7 @@ public class FtpSchedule {
     @Autowired
     private RenameFTPDriveService renameFTPDriveService;
 
-    @Scheduled(cron = "0 30 04 * * SAT")
+    @Scheduled(cron = "0 00 04 * * SAT")
     public void getMilanoFinanza() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 70;
@@ -38,7 +38,7 @@ public class FtpSchedule {
 
     }
 
-    @Scheduled(cron = "0 00 01 * * TUE-FRI")
+    @Scheduled(cron = "0 50 00 * * TUE-FRI")
     public void getMF595() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 595;
@@ -77,15 +77,76 @@ public class FtpSchedule {
 
     }
 
-    @Scheduled(cron = "0 59 08 * * TUE-SAT")
+    @Scheduled(cron = "0 00 01 * * *")
     public void getTuttoSport() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 872;
-        final String path = "\\\\192.168.0.172\\pdftemp\\calderonepdf\\FTPDrive\\TuttoSport\\20220317";
+
         logger.info("Fonte: "+idFonte);
 
-        final RenameFTPDriveDto ftpResponse = renameFTPDriveService.renameSourcesPDF(path,idFonte);
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
 
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 10 01 * * *")
+    public void getCorriereSport() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 872;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 10 04 * * *")
+    public void getCorriereUmbria () {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 632;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 20 04 * * *")
+    public void getCorriereArezzo () {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 15262;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 30 04 * * *")
+    public void getCorriereSiena () {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 1499;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 40 04 * * *")
+    public void getCorriereViterbo () {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 15263;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
 }
