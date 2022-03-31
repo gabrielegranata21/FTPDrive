@@ -80,34 +80,49 @@ public class RenameFTPDriveService {
                             }
                             numPage ++;
                         }
+                    } else {
+                        renameSinglePage(singleFile,idFonte,pdfPathRename);
                     }
-                }
-                    try {
-                        logger.info("PAGINA SINGOLA, STO PER RINOMINARE E COPIARE");
-                        logger.info("File che sto RINOMINANDO: "+singleFile.getName());
-                        final Path fromPath = Paths.get(singleFile.getAbsolutePath());
-                        String numPageFile = "";
-
-                        if(idFonte.equals(7896)) {
-                            numPageFile = singleFile.getName().substring(21, 23);
-                        } else if (idFonte.equals(7899)) {
-                            numPageFile = singleFile.getName().substring(20, 22);
-                        } else if (idFonte.equals(872) || idFonte.equals(873)) {
-                            numPageFile = singleFile.getName().substring(16, 18);
-                        }
-
-                        final StringBuilder fileFinalName = defineFileName(singleFile.getName(), numPageFile, idFonte);
-                        logger.info("FILE TO BE WRITE: "+fileFinalName+ " INTO "+pdfPathRename);
-                        final Path finalBatchFolder = Paths.get(pdfPathRename+File.separatorChar+fileFinalName);
-                        Files.copy(fromPath,finalBatchFolder);
-                    } catch (IOException ex) {
-                        logger.error("Errore durante la copia del file rinominato");
-                        logger.error(ex.getMessage());
-                    }
+                } else {
+                    renameSinglePage(singleFile,idFonte,pdfPathRename);
                 }
             }
+        }
         logger.info("*** END RENAME FONTE "+idFonte+" ****");
         return responseDto;
+    }
+
+    /**
+     * Method to rename pdf file from single Page
+     * @param singleFile
+     * @param idFonte
+     * @param pdfPathRename
+     */
+    private void renameSinglePage(final File singleFile,
+                                  final Integer idFonte,
+                                  final String pdfPathRename) {
+        try {
+            logger.info("PAGINA SINGOLA, STO PER RINOMINARE E COPIARE");
+            logger.info("File che sto RINOMINANDO: "+singleFile.getName());
+            final Path fromPath = Paths.get(singleFile.getAbsolutePath());
+            String numPageFile = "";
+
+            if(idFonte.equals(7896)) {
+                numPageFile = singleFile.getName().substring(21, 23);
+            } else if (idFonte.equals(7899)) {
+                numPageFile = singleFile.getName().substring(20, 22);
+            } else if (idFonte.equals(872) || idFonte.equals(873)) {
+                numPageFile = singleFile.getName().substring(16, 18);
+            }
+
+            final StringBuilder fileFinalName = defineFileName(singleFile.getName(), numPageFile, idFonte);
+            logger.info("FILE TO BE WRITE: "+fileFinalName+ " INTO "+pdfPathRename);
+            final Path finalBatchFolder = Paths.get(pdfPathRename+File.separatorChar+fileFinalName);
+            Files.copy(fromPath,finalBatchFolder);
+        } catch (IOException ex) {
+            logger.error("Errore durante la copia del file rinominato");
+            logger.error(ex.getMessage());
+        }
     }
 
     /**
