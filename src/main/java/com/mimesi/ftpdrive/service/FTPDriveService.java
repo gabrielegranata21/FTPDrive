@@ -271,6 +271,7 @@ public class FTPDriveService {
                         + env.getProperty("pattern.corrieresport.873")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 createFolder(new File(toPath));
+                break;
             case 1499:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.corrsiena.1499");
