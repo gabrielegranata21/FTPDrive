@@ -34,6 +34,7 @@ public class FTPConst {
     public static final String REGEX_CORRSPORT_VENETO = "CORVENGRI[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_STADIO = "STANAZALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_STADIO_BOLOGNA = "STABOLALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_STADIO_FIRENZE = "STAFIRALL[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_SUPPLEMENTO = "COTNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
 
     public static final String REGEX_RISVEGLIO = "[0-9]{2}_[0-9]{2}_[0-9]{2}_ilrisveglio_[0-9]{2}.pdf";
@@ -49,6 +50,7 @@ public class FTPConst {
     public static final String EDIZIONE_VENETO = "VEN";
     public static final String EDIZIONE_STADIO = "STA";
     public static final String EDIZIONE_STADIO_BOLOGNA = "STABOL";
+    public static final String EDIZIONE_STADIO_FIRENZE = "STAFIR";
     public static final String EDIZIONE_SUPPLEMENTO = "SUP";
 
 }

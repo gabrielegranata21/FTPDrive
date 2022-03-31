@@ -177,6 +177,7 @@ public class RenameFTPDriveService {
             final List<File> listFileVeneto = new ArrayList<>();
             final List<File> listFileStadio = new ArrayList<>();
             final List<File> listFileStadioBologna = new ArrayList<>();
+            final List<File> listFileStadioFirenze = new ArrayList<>();
             final List<File> listFileSupplemento = new ArrayList<>();
 
             for(int i = 0; i< Objects.requireNonNull(filenameList).length; i++) {
@@ -201,8 +202,11 @@ public class RenameFTPDriveService {
                 }  else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_STADIO)){
                     logger.info("Il file "+filenameList[i]+ " fa parte del CORR.STADIO");
                     listFileStadio.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
-                }  else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_STADIO_BOLOGNA)){
-                    logger.info("Il file "+filenameList[i]+ " fa parte deL CORR.STADIO edizione BOLOGNA");
+                }  else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_STADIO_BOLOGNA)) {
+                    logger.info("Il file " + filenameList[i] + " fa parte deL CORR.STADIO edizione BOLOGNA");
+                    listFileStadioBologna.add(new File(fromPathFiles + File.separatorChar + filenameList[i]));
+                } else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_STADIO_FIRENZE)){
+                    logger.info("Il file "+filenameList[i]+ " fa parte deL CORR.STADIO edizione FIRENZE");
                     listFileStadioBologna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 }  else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_SUPPLEMENTO)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione SUPPLEMENTO");
@@ -219,6 +223,7 @@ public class RenameFTPDriveService {
             listFileSource.add(listFileVeneto);
             listFileSource.add(listFileStadio);
             listFileSource.add(listFileStadioBologna);
+            listFileSource.add(listFileStadioFirenze);
             listFileSource.add(listFileSupplemento);
 
         } else if (idFonte.equals(7896)){
@@ -298,10 +303,12 @@ public class RenameFTPDriveService {
             filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_VENETO)){
             filename.append(FTPConst.EDIZIONE_VENETO).append(numPageFile).append(".pdf");
-        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO)){
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO)) {
             filename.append(FTPConst.EDIZIONE_STADIO).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO_BOLOGNA)){
             filename.append(FTPConst.EDIZIONE_STADIO_BOLOGNA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_STADIO_FIRENZE)){
+            filename.append(FTPConst.EDIZIONE_STADIO_FIRENZE).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_SUPPLEMENTO)){
             filename.append(FTPConst.EDIZIONE_SUPPLEMENTO).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_NAZIONALE)) {
