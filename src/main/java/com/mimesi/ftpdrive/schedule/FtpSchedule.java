@@ -77,7 +77,7 @@ public class FtpSchedule {
 
     }
 
-    @Scheduled(cron = "0 00 01 * * *")
+    @Scheduled(cron = "0 30 00 * * *")
     public void getTuttoSport() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 872;
@@ -89,7 +89,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    @Scheduled(cron = "0 10 01 * * *")
+    @Scheduled(cron = "0 00 01 * * *")
     public void getCorriereSport() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 872;
@@ -148,5 +148,4 @@ public class FtpSchedule {
 
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
-
 }
