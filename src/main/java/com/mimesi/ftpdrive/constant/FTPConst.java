@@ -25,6 +25,7 @@ public class FTPConst {
     public static final String REGEX_TUTTOSPORT_PIEMONTE = "TTSPIEMON[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_TUTTOSPORT_SICILIA = "TTSSICMES[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_TUTTOSPORT_SARDEGNA = "TTSSARCAG[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_TUTTOSPORT_LOMBARDIA = "TTSLOMMON[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
 
     public static final String REGEX_CORRSPORT_NAZIONALE = "CORNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_CAMPANIA = "CORCAMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
@@ -42,6 +43,7 @@ public class FTPConst {
     public static final String REGEX_VALSUSA = "lavalsusa-[0-9]{8}_[0-9]{3}.pdf";
 
     public static final String EDIZIONE_PIEMONTE = "PIE";
+    public static final String EDIZIONE_LOMBARDIA = "LOM";
     public static final String EDIZIONE_SICILIA = "SIC";
     public static final String EDIZIONE_SARDEGNA = "SAR";
     public static final String EDIZIONE_CAMPANIA = "CAM";

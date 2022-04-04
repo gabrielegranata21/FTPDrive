@@ -145,6 +145,7 @@ public class RenameFTPDriveService {
 
             final List<File> listFilePiemonte = new ArrayList<>();
             final List<File> listFileSicilia = new ArrayList<>();
+            final List<File> listFileLombardia = new ArrayList<>();
 
             for(int i=0;i<filenameList.length;i++) {
                 if(filenameList[i].matches(FTPConst.REGEX_TUTTOSPORT_NAZIONALE)) {
@@ -159,6 +160,9 @@ public class RenameFTPDriveService {
                 }  else if (filenameList[i].matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione SARDEGNA");
                     listFileSardegna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else if (filenameList[i].matches(FTPConst.REGEX_TUTTOSPORT_LOMBARDIA)){
+                    logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione LOMBARDIA");
+                    listFileSardegna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 }
             }
 
@@ -167,6 +171,7 @@ public class RenameFTPDriveService {
             listFileSource.add(listFilePiemonte);
             listFileSource.add(listFileSicilia);
             listFileSource.add(listFileSardegna);
+            listFileSource.add(listFileLombardia);
 
         }else if (idFonte.equals(873)) {
             logger.info("***** IT'S READING CORRIERE dello SPORT SOURCE *****");
@@ -317,6 +322,8 @@ public class RenameFTPDriveService {
             filename.append(FTPConst.EDIZIONE_PIEMONTE).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SICILIA)){
             filename.append(FTPConst.EDIZIONE_SICILIA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_LOMBARDIA)) {
+            filename.append(FTPConst.EDIZIONE_LOMBARDIA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)) {
             filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_RISVEGLIO)){
