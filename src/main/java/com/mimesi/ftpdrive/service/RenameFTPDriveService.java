@@ -192,6 +192,9 @@ public class RenameFTPDriveService {
                 } else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_CAMPANIA)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione CAMPANIA");
                     listFileCampania.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_SALERNO)){
+                    logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione SALERNO");
+                    listFilePuglia.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 } else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_PUGLIA)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione PUGLIA");
                     listFilePuglia.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
@@ -300,6 +303,8 @@ public class RenameFTPDriveService {
             filename.append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_CAMPANIA)){
             filename.append(FTPConst.EDIZIONE_CAMPANIA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_SALERNO)){
+            filename.append(FTPConst.EDIZIONE_SALERNO).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_PUGLIA)){
             filename.append(FTPConst.EDIZIONE_PUGLIA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_ROMA)){

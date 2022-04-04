@@ -31,6 +31,7 @@ public class FTPConst {
 
     public static final String REGEX_CORRSPORT_NAZIONALE = "CORNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_CAMPANIA = "CORCAMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_CORRSPORT_SALERNO = "CORSALROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_PUGLIA = "CORPUGBAR[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_ROMA = "CORROMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_SARDEGNA = "CORSARCAG[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
@@ -49,6 +50,7 @@ public class FTPConst {
     public static final String EDIZIONE_SICILIA = "SIC";
     public static final String EDIZIONE_SARDEGNA = "SAR";
     public static final String EDIZIONE_CAMPANIA = "CAM";
+    public static final String EDIZIONE_SALERNO = "SAL";
     public static final String EDIZIONE_PUGLIA = "PUG";
     public static final String EDIZIONE_ROMA = "ROM";
     public static final String EDIZIONE_VENETO = "VEN";
