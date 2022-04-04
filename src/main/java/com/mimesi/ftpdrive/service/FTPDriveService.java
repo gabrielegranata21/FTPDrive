@@ -299,13 +299,13 @@ public class FTPDriveService {
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.tuttosport.872")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                createFolder(new File(toPath));
+                makeFolder(new File(toPath));
                 break;
             case 873:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.corrieresport.873")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                createFolder(new File(toPath));
+                makeFolder(new File(toPath));
                 break;
             case 1499:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
@@ -323,7 +323,7 @@ public class FTPDriveService {
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.risveglio.7896")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                createFolder(new File(toPath));
+                makeFolder(new File(toPath));
                 break;
             case 7897:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
@@ -333,7 +333,7 @@ public class FTPDriveService {
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.valsusa.7899")
                         + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                createFolder(new File(toPath));
+                makeFolder(new File(toPath));
                 break;
         }
 
@@ -392,12 +392,6 @@ public class FTPDriveService {
     private void makeFolder(final File fileWithFolder) {
         if(!fileWithFolder.exists()) {
             fileWithFolder.mkdirs();
-        }
-    }
-
-    private void createFolder(final File file) {
-        if(!file.exists()) {
-            file.mkdirs();
         }
     }
 }
