@@ -148,4 +148,18 @@ public class FtpSchedule {
 
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
+
+    @Scheduled(cron = "0 30 10 * * *")
+    public void getDiogene() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+
+        final Integer idFonte = 999;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
 }

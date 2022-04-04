@@ -45,6 +45,8 @@ public class FTPDriveService {
     public FTPDriveDto getPDFromFonte(final Integer fonte) {
         FTPDriveDto ftpDto = new FTPDriveDto();
 
+        ftpDto.setIdFonte(fonte);
+
         final String fromPath = pdfFromPath(fonte);
         logger.info("Get File from: "+fromPath);
         final String toPath = pdfToPath(fonte);
@@ -56,7 +58,15 @@ public class FTPDriveService {
             ChannelSftp channelSftp = (ChannelSftp) connectionChannel;
             logger.info("*** START TO DOWNLOAD FILE FROM "+fromPath);
 
-            ftpDto = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
+            ftpDto.setFromPath(fromPath);
+            ftpDto.setToPath(toPath);
+
+            FTPDriveDto result = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
+            if(result.isResultDownload() && !fonte.equals(999)){
+                moveFileForCompressPDF(toPath);
+            }
+
+            ftpDto.setResultDownload(result.isResultDownload());
 
         } catch (JSchException jSchException) {
             logger.error("Errore durante la connessione al server SFTP: "+jSchException.getMessage());
@@ -70,8 +80,6 @@ public class FTPDriveService {
                 fonte.equals(7896) ||
                 fonte.equals(7899)) {
             renameFTPDriveService.renameSourcesPDF(toPath,fonte);
-        } else {
-            moveFileForCompressPDF(toPath);
         }
 
         return ftpDto;
@@ -114,20 +122,22 @@ public class FTPDriveService {
     private FTPDriveDto downloadFromFolder(final ChannelSftp channelSftp,
                                            final String folder,
                                            final String toPath,
-                                           final Integer idFonte) {
+                                           final Integer idFonte){
         final FTPDriveDto ftpDto = new FTPDriveDto();
         ftpDto.setIdFonte(idFonte);
         ftpDto.setFromPath(folder);
         ftpDto.setToPath(toPath);
+
         try {
             Vector<ChannelSftp.LsEntry> entries = channelSftp.ls(folder);
-            logger.info("Entries: "+entries);
+            if(!entries.isEmpty()){
+                logger.info("Entries: "+entries);
 
-            //download all from folder
-            for (ChannelSftp.LsEntry en : entries) {
-                if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
-                    continue;
-                }
+                //download all from folder
+                for (ChannelSftp.LsEntry en : entries) {
+                    if (en.getFilename().equals(".") || en.getFilename().equals("..") || en.getAttrs().isDir()) {
+                        continue;
+                    }
 
                 logger.info("File will be download: "+en.getFilename());
                 logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
@@ -136,6 +146,29 @@ public class FTPDriveService {
                 logger.info("Download Ended ----> Successfully Write in "+toPath);
             }
             ftpDto.setResultDownload(true);
+                    logger.info("File will be download: "+en.getFilename());
+
+                    if (idFonte.equals(999)) {
+                        String toPathWithOriginalFilename = toPath
+                                + File.separatorChar
+                                + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                        makeFolder(new File(toPathWithOriginalFilename));
+                        final String finalFolderDownload = toPathWithOriginalFilename + File.separatorChar + en.getFilename();
+                        logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ finalFolderDownload);
+                        channelSftp.get(folder + en.getFilename(), finalFolderDownload);
+                        logger.info("Download Ended ----> Successfully Write in "+finalFolderDownload);
+                    } else {
+                        logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+                        channelSftp.get(folder + en.getFilename(), toPath);
+                        logger.info("Download Ended ----> Successfully Write in "+toPath);
+                    }
+                }
+                ftpDto.setResultDownload(true);
+            } else {
+                logger.error("Errore durante il download della fonte "+idFonte);
+                logger.error("THE FOLDER IS EMPTY");
+                ftpDto.setResultDownload(false);
+            }
         } catch (SftpException sftpException) {
             logger.error("Errore durante il download: "+sftpException.getMessage());
             if (sftpException.getMessage().contains("No such file")) {
@@ -194,6 +227,9 @@ public class FTPDriveService {
             case 873:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_873
+            case 999:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_999
                         + datePatternFolder + "/";
                 break;
             case 1499:
@@ -255,6 +291,10 @@ public class FTPDriveService {
             case 595:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.mifi.595");
+                break;
+            case 999:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.diogene.999");
                 break;
             case 632:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
@@ -337,9 +377,7 @@ public class FTPDriveService {
         final Path fromPath = Paths.get(toPath);
         final File finalFileBatch = new File(batchFolderFinal);
 
-        if(!finalFileBatch.exists()) {
-            finalFileBatch.mkdirs();
-        }
+        makeFolder(finalFileBatch);
 
         try{
             final Path finalBatchFolder = Paths.get(batchFolderFinal+fromPath.getFileName());
@@ -350,6 +388,16 @@ public class FTPDriveService {
         }
 
         logger.info("***** END MOVE FILE INTO "+batchFolderFinal+" *****");
+    }
+
+    /**
+     * Method for create folders from File
+     * @param fileWithFolder
+     */
+    private void makeFolder(final File fileWithFolder) {
+        if(!fileWithFolder.exists()) {
+            fileWithFolder.mkdirs();
+        }
     }
 
     private void createFolder(final File file) {
