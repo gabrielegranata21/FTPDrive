@@ -62,7 +62,8 @@ public class FTPDriveService {
             ftpDto.setToPath(toPath);
 
             FTPDriveDto result = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
-            if(result.isResultDownload() && !fonte.equals(999)){
+            if(result.isResultDownload() && !fonte.equals(999)
+                && !fonte.equals(872) && !fonte.equals(873) && !fonte.equals(7896) && !fonte.equals(7899)){
                 moveFileForCompressPDF(toPath);
             }
 
