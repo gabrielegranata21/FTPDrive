@@ -139,15 +139,6 @@ public class FTPDriveService {
                         continue;
                     }
 
-                logger.info("File will be download: "+en.getFilename());
-                logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
-
-                channelSftp.get(folder + en.getFilename(), toPath);
-                logger.info("Download Ended ----> Successfully Write in "+toPath);
-            }
-            ftpDto.setResultDownload(true);
-                    logger.info("File will be download: "+en.getFilename());
-
                     if (idFonte.equals(999)) {
                         String toPathWithOriginalFilename = toPath
                                 + File.separatorChar
@@ -163,7 +154,9 @@ public class FTPDriveService {
                         logger.info("Download Ended ----> Successfully Write in "+toPath);
                     }
                 }
+
                 ftpDto.setResultDownload(true);
+
             } else {
                 logger.error("Errore durante il download della fonte "+idFonte);
                 logger.error("THE FOLDER IS EMPTY");
@@ -227,6 +220,8 @@ public class FTPDriveService {
             case 873:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_873
+                        + datePatternFolder + "/";
+                break;
             case 999:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_999
