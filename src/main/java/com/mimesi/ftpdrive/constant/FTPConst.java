@@ -10,14 +10,14 @@ public class FTPConst {
     public static final String BASE_PATH_216 = "/ClassMedia/ITALIAOGGI/";
     public static final String BASE_PATH_217 = "/ClassMedia/ITALIAOGGISETTE/";
     public static final String BASE_PATH_595 = "/ClassMedia/MIFI/";
-    public static final String BASE_PATH_632 = "/GruppoCorriere/UMBRIA/";
+    public static final String BASE_PATH_632 = "/GruppoCorriere/PG/";
     public static final String BASE_PATH_872 = "/TuttoSport/";
     public static final String BASE_PATH_873 = "/CorriereSport/";
 
     public static final String BASE_PATH_999 = "/Autorivari/Diogene/";
-    public static final String BASE_PATH_1499 = "/GruppoCorriere/SIENA/";
-    public static final String BASE_PATH_15262 = "/GruppoCorriere/AREZZO/";
-    public static final String BASE_PATH_15263 = "/GruppoCorriere/VITERBO/";
+    public static final String BASE_PATH_1499 = "/GruppoCorriere/SI/";
+    public static final String BASE_PATH_15262 = "/GruppoCorriere/AR/";
+    public static final String BASE_PATH_15263 = "/GruppoCorriere/VT/";
     public static final String BASE_PATH_7896 = "/IlRisveglio/";
     public static final String BASE_PATH_7899 = "/LaValSusa/";
     public static final String BASE_PATH_7897 = "/RisveglioPopolare/";
