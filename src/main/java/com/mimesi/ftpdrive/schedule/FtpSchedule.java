@@ -137,7 +137,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    // @Scheduled(cron = "0 10 04 * * *")
+    @Scheduled(cron = "0 10 04 * * *")
     public void getCorriereUmbria () {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 632;
@@ -149,7 +149,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    // @Scheduled(cron = "0 20 04 * * *")
+    @Scheduled(cron = "0 20 04 * * *")
     public void getCorriereArezzo () {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 15262;
@@ -161,7 +161,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    // @Scheduled(cron = "0 30 04 * * *")
+    @Scheduled(cron = "0 30 04 * * *")
     public void getCorriereSiena () {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 1499;
@@ -173,7 +173,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    // @Scheduled(cron = "0 40 04 * * *")
+    @Scheduled(cron = "0 40 04 * * *")
     public void getCorriereViterbo () {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 15263;
