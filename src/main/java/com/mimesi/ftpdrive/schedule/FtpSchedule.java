@@ -101,6 +101,42 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
+    @Scheduled(cron = "0 15 00 * * THU")
+    public void getIlRisveglio() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 7896;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 10 00 * * THU")
+    public void getIlRisveglioPopolare() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 7897;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
+    @Scheduled(cron = "0 20 01 * * THU")
+    public void getLaValSusa() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 7899;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+    }
+
     // @Scheduled(cron = "0 10 04 * * *")
     public void getCorriereUmbria () {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
