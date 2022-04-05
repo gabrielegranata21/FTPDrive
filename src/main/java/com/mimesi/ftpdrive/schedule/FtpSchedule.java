@@ -92,7 +92,7 @@ public class FtpSchedule {
     @Scheduled(cron = "0 00 01 * * *")
     public void getCorriereSport() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
-        final Integer idFonte = 872;
+        final Integer idFonte = 873;
 
         logger.info("Fonte: "+idFonte);
 
