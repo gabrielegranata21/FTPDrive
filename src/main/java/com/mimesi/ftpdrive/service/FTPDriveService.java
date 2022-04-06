@@ -146,9 +146,17 @@ public class FTPDriveService {
                                 + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                         makeFolder(new File(toPathWithOriginalFilename));
                         final String finalFolderDownload = toPathWithOriginalFilename + File.separatorChar + en.getFilename();
-                        logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ finalFolderDownload);
+                        logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + finalFolderDownload);
                         channelSftp.get(folder + en.getFilename(), finalFolderDownload);
-                        logger.info("Download Ended ----> Successfully Write in "+finalFolderDownload);
+                        logger.info("Download Ended ----> Successfully Write in " + finalFolderDownload);
+                    } else if (idFonte.equals(7899)) {
+                        final String currentDatePattern = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                        if(en.getFilename().matches(FTPConst.REGEX_VALSUSA)
+                                && en.getFilename().contains(currentDatePattern)) {
+                            logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+                            channelSftp.get(folder + en.getFilename(), toPath);
+                            logger.info("Download Ended ----> Successfully Write in "+toPath);
+                        }
                     } else {
                         logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
                         channelSftp.get(folder + en.getFilename(), toPath);
@@ -254,9 +262,10 @@ public class FTPDriveService {
                         + datePatternFolder + "/";
                 break;
             case 7899:
-                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                fromPath = FTPConst.BASE_PATH_7899
-                        + datePatternFolder + "/";
+                // datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                // fromPath = FTPConst.BASE_PATH_7899
+                //        + datePatternFolder + "/";
+                fromPath = FTPConst.BASE_PATH_7899;
                 break;
         }
         return fromPath;
