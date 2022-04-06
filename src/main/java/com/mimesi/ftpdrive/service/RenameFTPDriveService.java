@@ -136,6 +136,7 @@ public class RenameFTPDriveService {
         final List<List<File>> listFileSource = new ArrayList<>();
         final List<File> listFileNazionale = new ArrayList<>();
         final List<File> listFileSardegna = new ArrayList<>();
+        final List<File> listFileSupplemento = new ArrayList<>();
 
         final File filesPAth = new File(fromPathFiles);
         final String[] filenameList = filesPAth.list();
@@ -162,7 +163,10 @@ public class RenameFTPDriveService {
                     listFileSardegna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 } else if (filenameList[i].matches(FTPConst.REGEX_TUTTOSPORT_LOMBARDIA)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione LOMBARDIA");
-                    listFileSardegna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                    listFileLombardia.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else if (filenameList[i].matches(FTPConst.REGEX_TUTTOSPORT_SUPPLEMENTO)){
+                    logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione TT.SUPPLEMENTO");
+                    listFileSupplemento.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 }
             }
 
@@ -172,6 +176,7 @@ public class RenameFTPDriveService {
             listFileSource.add(listFileSicilia);
             listFileSource.add(listFileSardegna);
             listFileSource.add(listFileLombardia);
+            listFileSource.add(listFileSupplemento);
 
         }else if (idFonte.equals(873)) {
             logger.info("***** IT'S READING CORRIERE dello SPORT SOURCE *****");
@@ -183,7 +188,7 @@ public class RenameFTPDriveService {
             final List<File> listFileStadio = new ArrayList<>();
             final List<File> listFileStadioBologna = new ArrayList<>();
             final List<File> listFileStadioFirenze = new ArrayList<>();
-            final List<File> listFileSupplemento = new ArrayList<>();
+
 
             for(int i = 0; i< Objects.requireNonNull(filenameList).length; i++) {
                 if(filenameList[i].matches(FTPConst.REGEX_CORRSPORT_NAZIONALE)) {
@@ -331,6 +336,8 @@ public class RenameFTPDriveService {
             filename.append(FTPConst.EDIZIONE_LOMBARDIA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SARDEGNA)) {
             filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SUPPLEMENTO)) {
+            filename.append(FTPConst.EDIZIONE_SUPPLEMENTO).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_RISVEGLIO)){
             filename.append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_VALSUSA)){

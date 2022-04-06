@@ -28,6 +28,7 @@ public class FTPConst {
     public static final String REGEX_TUTTOSPORT_SICILIA = "TTSSICMES[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_TUTTOSPORT_SARDEGNA = "TTSSARCAG[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_TUTTOSPORT_LOMBARDIA = "TTSLOMMON[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
+    public static final String REGEX_TUTTOSPORT_SUPPLEMENTO = "TTTNAZROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
 
     public static final String REGEX_CORRSPORT_NAZIONALE = "CORNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
     public static final String REGEX_CORRSPORT_CAMPANIA = "CORCAMROM[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
