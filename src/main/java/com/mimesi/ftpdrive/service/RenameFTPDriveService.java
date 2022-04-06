@@ -220,7 +220,7 @@ public class RenameFTPDriveService {
                     listFileStadioBologna.add(new File(fromPathFiles + File.separatorChar + filenameList[i]));
                 } else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_STADIO_FIRENZE)){
                     logger.info("Il file "+filenameList[i]+ " fa parte deL CORR.STADIO edizione FIRENZE");
-                    listFileStadioBologna.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                    listFileStadioFirenze.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
                 }  else if (filenameList[i].matches(FTPConst.REGEX_CORRSPORT_SUPPLEMENTO)){
                     logger.info("Il file "+filenameList[i]+ " fa parte dell'edizione SUPPLEMENTO");
                     listFileSupplemento.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
