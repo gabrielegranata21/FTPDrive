@@ -125,7 +125,7 @@ public class FtpSchedule {
         logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
     }
 
-    @Scheduled(cron = "0 20 01 * * THU")
+    @Scheduled(cron = "0 30 01 * * THU")
     public void getLaValSusa() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
         final Integer idFonte = 7899;
