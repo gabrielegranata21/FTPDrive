@@ -285,7 +285,9 @@ public class FTPDriveService {
         switch (fonte) {
             case 19:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
-                        + env.getProperty("pattern.gazzparma.19");
+                        + env.getProperty("pattern.gazzparma.19")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                makeFolder(new File(toPath));
                 break;
             case 70:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
