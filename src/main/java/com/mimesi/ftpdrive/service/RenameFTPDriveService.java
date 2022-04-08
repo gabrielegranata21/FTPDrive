@@ -314,8 +314,10 @@ public class RenameFTPDriveService {
         StringBuilder filename = new StringBuilder();
         if (idFonte.equals(7896) || idFonte.equals(7899)) {
             filename.append(idFonte+"_binpage");
+        } else if (idFonte.equals(19)) {
+            filename.append("00"+ idFonte+"_binpage");
         } else {
-            filename.append("0" +idFonte+ "_binpage");
+            filename.append("0" + idFonte + "_binpage");
         }
 
         if (originalFilename.matches(FTPConst.REGEX_CORRSPORT_NAZIONALE)) {
