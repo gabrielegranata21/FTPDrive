@@ -76,7 +76,8 @@ public class FTPDriveService {
             ftpDto.setError(jSchException.getMessage());
         }
 
-        if (fonte.equals(872) ||
+        if (fonte.equals(19) ||
+                fonte.equals(872) ||
                 fonte.equals(873) ||
                 fonte.equals(7896) ||
                 fonte.equals(7899)) {

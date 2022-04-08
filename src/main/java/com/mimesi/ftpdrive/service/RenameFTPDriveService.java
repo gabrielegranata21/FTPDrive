@@ -111,7 +111,7 @@ public class RenameFTPDriveService {
                 numPageFile = singleFile.getName().substring(21, 23);
             } else if (idFonte.equals(7899)) {
                 numPageFile = singleFile.getName().substring(20, 22);
-            } else if (idFonte.equals(872) || idFonte.equals(873)) {
+            } else if (idFonte.equals(19) || idFonte.equals(872) || idFonte.equals(873)) {
                 numPageFile = singleFile.getName().substring(16, 18);
             }
 
@@ -141,7 +141,21 @@ public class RenameFTPDriveService {
         final File filesPAth = new File(fromPathFiles);
         final String[] filenameList = filesPAth.list();
 
-        if(idFonte.equals(872)) {
+        if (idFonte.equals(19)) {
+            logger.info("***** IT'S READING GAZZETTA PARMA SOURCE *****");
+            final List<File> listGazzParma = new ArrayList<>();
+
+            for(int i = 0; i< Objects.requireNonNull(filenameList).length; i++) {
+                if(filenameList[i].matches(FTPConst.REGEX_GAZZPARMA)) {
+                    listGazzParma.add(new File(fromPathFiles+File.separatorChar+filenameList[i]));
+                } else {
+                    logger.error("IL FILE "+filenameList[i]+" NON RISPETTA LA REGEX");
+                }
+            }
+
+            logger.info("ADDING LIST OF EDITION IN FATHER LIST FOR GAZZETTA PARMA");
+            listFileSource.add(listGazzParma);
+        }else if(idFonte.equals(872)) {
             logger.info("***** IT'S READING TUTTOSPORT SOURCE *****");
 
             final List<File> listFilePiemonte = new ArrayList<>();
@@ -338,6 +352,8 @@ public class RenameFTPDriveService {
             filename.append(FTPConst.EDIZIONE_SARDEGNA).append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_TUTTOSPORT_SUPPLEMENTO)) {
             filename.append(FTPConst.EDIZIONE_SUPPLEMENTO).append(numPageFile).append(".pdf");
+        } else if (originalFilename.matches(FTPConst.REGEX_GAZZPARMA)) {
+            filename.append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_RISVEGLIO)){
             filename.append(numPageFile).append(".pdf");
         } else if (originalFilename.matches(FTPConst.REGEX_VALSUSA)){

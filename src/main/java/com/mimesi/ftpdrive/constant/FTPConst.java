@@ -44,7 +44,7 @@ public class FTPConst {
     public static final String REGEX_CORRSPORT_SUPPLEMENTO = "COTNAZTUT[0-9]{9}[A-Z]{4}@[0-9]{3}.pdf";
 
     public static final String REGEX_RISVEGLIO = "[0-9]{2}_[0-9]{2}_[0-9]{2}_ilrisveglio_[0-9]{2}.pdf";
-
+    public static final String REGEX_GAZZPARMA = "[0-9]{4}_GAZPARMA_[0-9]{3}.pdf";
     public static final String REGEX_VALSUSA = "lavalsusa-[0-9]{8}_[0-9]{3}.pdf";
 
     public static final String EDIZIONE_PIEMONTE = "PIE";
