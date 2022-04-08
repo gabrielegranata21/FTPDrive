@@ -6,6 +6,7 @@ public class FTPConst {
     public static final String YEAR_MONTH = "yyyyMM";
     public static final String DAY = "dd";
 
+    public static final String BASE_PATH_19 = "/GazzettaParma/";
     public static final String BASE_PATH_70 = "/ClassMedia/MILANOFINANZA/";
     public static final String BASE_PATH_216 = "/ClassMedia/ITALIAOGGI/";
     public static final String BASE_PATH_217 = "/ClassMedia/ITALIAOGGISETTE/";
