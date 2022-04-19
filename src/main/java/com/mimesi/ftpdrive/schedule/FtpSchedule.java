@@ -38,6 +38,19 @@ public class FtpSchedule {
 
     }
 
+    @Scheduled(cron = "0 45 01 * * *")
+    public void getQuotidianoNazionale() {
+        logger.info("Current time is :: " + Calendar.getInstance().getTime());
+        final Integer idFonte = 23;
+
+        logger.info("Fonte: "+idFonte);
+
+        final FTPDriveDto ftpResponse = ftpService.getPDFromFonte(idFonte);
+
+        logger.info("Risultato Dowload Fonte "+idFonte+": "+ftpResponse.isResultDownload());
+
+    }
+
     @Scheduled(cron = "0 50 00 * * TUE-FRI")
     public void getMF595() {
         logger.info("Current time is :: " + Calendar.getInstance().getTime());
