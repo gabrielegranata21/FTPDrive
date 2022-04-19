@@ -201,6 +201,11 @@ public class FTPDriveService {
                 fromPath = FTPConst.BASE_PATH_70
                         + datePatternFolder + "/";
                 break;
+            case 23:
+                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                fromPath = FTPConst.BASE_PATH_23_290_291
+                        + datePatternFolder + "/";
+                break;
             case 216:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
                 fromPath = FTPConst.BASE_PATH_216
@@ -284,6 +289,10 @@ public class FTPDriveService {
             case 70:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
                         + env.getProperty("pattern.milanofinanza.70");
+                break;
+            case 23:
+                toPath = env.getProperty("parent.folder") + File.separatorChar
+                        + env.getProperty("pattern.qn.23");
                 break;
             case 216:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
