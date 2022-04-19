@@ -13,7 +13,7 @@ public class FTPConst {
     public static final String BASE_PATH_632 = "/GruppoCorriere/PG/";
     public static final String BASE_PATH_872 = "/TuttoSport/";
     public static final String BASE_PATH_873 = "/CorriereSport/";
-
+    public static final String BASE_PATH_23_290_291 = "/QuotidianoNazionale/";
     public static final String BASE_PATH_999 = "/Autorivari/Diogene/";
     public static final String BASE_PATH_1499 = "/GruppoCorriere/SI/";
     public static final String BASE_PATH_15262 = "/GruppoCorriere/AR/";
