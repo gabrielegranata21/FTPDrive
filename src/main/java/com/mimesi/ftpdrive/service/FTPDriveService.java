@@ -63,7 +63,7 @@ public class FTPDriveService {
 
             FTPDriveDto result = downloadFromFolder(channelSftp,fromPath,toPath,fonte);
             if(result.isResultDownload() && !fonte.equals(999)
-                && !fonte.equals(872) && !fonte.equals(873) && !fonte.equals(7896) && !fonte.equals(7899)){
+                && !fonte.equals(872) && !fonte.equals(873) && !fonte.equals(7896) && !fonte.equals(7899) && !fonte.equals(23)){
                 moveFileForCompressPDF(toPath);
             }
 
@@ -151,11 +151,37 @@ public class FTPDriveService {
                         logger.info("Download Ended ----> Successfully Write in " + finalFolderDownload);
                     } else if (idFonte.equals(7899)) {
                         final String currentDatePattern = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                        if(en.getFilename().matches(FTPConst.REGEX_VALSUSA)
+                        if (en.getFilename().matches(FTPConst.REGEX_VALSUSA)
                                 && en.getFilename().contains(currentDatePattern)) {
-                            logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
+                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
                             channelSftp.get(folder + en.getFilename(), toPath);
-                            logger.info("Download Ended ----> Successfully Write in "+toPath);
+                            logger.info("Download Ended ----> Successfully Write in " + toPath);
+                        }
+                    } else if (idFonte.equals(23)) {
+                        final String currentDatePattern = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+
+                        if (en.getFilename().matches(FTPConst.REGEX_CARLINO)
+                                && en.getFilename().contains(currentDatePattern)) {
+                            logger.info("Verifico Download X QUOTIDIANO CARLINO");
+                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                            channelSftp.get(folder + en.getFilename(), toPath);
+                            logger.info("Download Ended ----> Successfully Write in " + toPath);
+                        } else if (en.getFilename().matches(FTPConst.REGEX_NAZIONE)
+                                && en.getFilename().contains(currentDatePattern)) {
+                            logger.info("Verifico Download X QUOTIDIANO NAZIONALE");
+                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                            channelSftp.get(folder + en.getFilename(), toPath);
+                            logger.info("Download Ended ----> Successfully Write in " + toPath);
+                        } else if (en.getFilename().matches(FTPConst.REGEX_GIORNO)
+                                && en.getFilename().contains(currentDatePattern)) {
+                            logger.info("Verifico Download X QUOTIDIANO GIORNO");
+                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                            channelSftp.get(folder + en.getFilename(), toPath);
+                            logger.info("Download Ended ----> Successfully Write in " + toPath);
+                        } else {
+                            logger.error("Errore durante il download della fonte "+idFonte);
+                            logger.error("THE FOLDER IS EMPTY");
+                            ftpDto.setResultDownload(false);
                         }
                     } else {
                         logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
@@ -202,9 +228,7 @@ public class FTPDriveService {
                         + datePatternFolder + "/";
                 break;
             case 23:
-                datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                fromPath = FTPConst.BASE_PATH_23_290_291
-                        + datePatternFolder + "/";
+                fromPath = FTPConst.BASE_PATH_23_290_291;
                 break;
             case 216:
                 datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
@@ -267,9 +291,6 @@ public class FTPDriveService {
                         + datePatternFolder + "/";
                 break;
             case 7899:
-                // datePatternFolder = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-                // fromPath = FTPConst.BASE_PATH_7899
-                //        + datePatternFolder + "/";
                 fromPath = FTPConst.BASE_PATH_7899;
                 break;
         }
@@ -292,7 +313,9 @@ public class FTPDriveService {
                 break;
             case 23:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
-                        + env.getProperty("pattern.qn.23");
+                        + env.getProperty("pattern.qn.23")
+                        + File.separatorChar + datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
+                makeFolder(new File(toPath));
                 break;
             case 216:
                 toPath = env.getProperty("parent.folder") + File.separatorChar
