@@ -159,30 +159,35 @@ public class FTPDriveService {
                         }
                     } else if (idFonte.equals(23)) {
                         final String currentDatePattern = datePatternFolder(FTPConst.DATE_PATTERN_FIRST);
-
-                        if (en.getFilename().matches(FTPConst.REGEX_CARLINO)
+                        if (!en.getFilename().matches(FTPConst.REGEX_CHK)
                                 && en.getFilename().contains(currentDatePattern)) {
-                            logger.info("Verifico Download X QUOTIDIANO CARLINO");
-                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
-                            channelSftp.get(folder + en.getFilename(), toPath);
-                            logger.info("Download Ended ----> Successfully Write in " + toPath);
-                        } else if (en.getFilename().matches(FTPConst.REGEX_NAZIONE)
-                                && en.getFilename().contains(currentDatePattern)) {
-                            logger.info("Verifico Download X QUOTIDIANO NAZIONALE");
-                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
-                            channelSftp.get(folder + en.getFilename(), toPath);
-                            logger.info("Download Ended ----> Successfully Write in " + toPath);
-                        } else if (en.getFilename().matches(FTPConst.REGEX_GIORNO)
-                                && en.getFilename().contains(currentDatePattern)) {
-                            logger.info("Verifico Download X QUOTIDIANO GIORNO");
-                            logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
-                            channelSftp.get(folder + en.getFilename(), toPath);
-                            logger.info("Download Ended ----> Successfully Write in " + toPath);
+                            if (en.getFilename().matches(FTPConst.REGEX_CARLINO)
+                                    && en.getFilename().contains(currentDatePattern)) {
+                                logger.info("Verifico Download X QUOTIDIANO CARLINO");
+                                logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                                channelSftp.get(folder + en.getFilename(), toPath);
+                                logger.info("Download Ended ----> Successfully Write in " + toPath);
+                            } else if (en.getFilename().matches(FTPConst.REGEX_NAZIONE)
+                                    && en.getFilename().contains(currentDatePattern)) {
+                                logger.info("Verifico Download X QUOTIDIANO NAZIONALE");
+                                logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                                channelSftp.get(folder + en.getFilename(), toPath);
+                                logger.info("Download Ended ----> Successfully Write in " + toPath);
+                            } else if (en.getFilename().matches(FTPConst.REGEX_GIORNO)
+                                    && en.getFilename().contains(currentDatePattern)) {
+                                logger.info("Verifico Download X QUOTIDIANO GIORNO");
+                                logger.info("[ File For Download: " + folder + en.getFilename() + "  ] Write to: " + toPath);
+                                channelSftp.get(folder + en.getFilename(), toPath);
+                                logger.info("Download Ended ----> Successfully Write in " + toPath);
+                            } else {
+                                logger.error("Errore durante il download della fonte "+idFonte);
+                                logger.error("THE FOLDER IS EMPTY");
+                                ftpDto.setResultDownload(false);
+                            }
                         } else {
-                            logger.error("Errore durante il download della fonte "+idFonte);
-                            logger.error("THE FOLDER IS EMPTY");
-                            ftpDto.setResultDownload(false);
+                            logger.warn("Il file "+en.getFilename()+ " non e\' da scaricare");
                         }
+
                     } else {
                         logger.info("[ File For Download: "+ folder + en.getFilename() +"  ] Write to: "+ toPath);
                         channelSftp.get(folder + en.getFilename(), toPath);
