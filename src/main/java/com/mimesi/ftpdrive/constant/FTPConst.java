@@ -45,6 +45,10 @@ public class FTPConst {
     public static final String REGEX_RISVEGLIO = "[0-9]{2}_[0-9]{2}_[0-9]{2}_ilrisveglio_[0-9]{2}.pdf";
 
     public static final String REGEX_VALSUSA = "lavalsusa-[0-9]{8}_[0-9]{3}.pdf";
+    public static final String REGEX_CARLINO = "[0-9]{4}-CARLINO-[0-9]{8}.zip";
+    public static final String REGEX_NAZIONE = "[0-9]{4}-NAZIONE-[0-9]{8}.zip";
+    public static final String REGEX_GIORNO = "[0-9]{4}-GIORNO-[0-9]{8}.zip";
+    public static final String REGEX_CHK = "[0-9]{4}.*-[0-9]{8}.chk";
 
     public static final String EDIZIONE_PIEMONTE = "PIE";
     public static final String EDIZIONE_LOMBARDIA = "LOM";
